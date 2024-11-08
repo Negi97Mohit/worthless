@@ -21,7 +21,7 @@ body {
 .AppGrid {
   display: flex;
   width: 100%; /* Full width for content */
-  margin-top: 100px;  /* Space to push content below the fixed logo */
+  margin-top: 100px; /* Space to push content below the fixed logo */
   gap: 20px; /* Space between columns */
 }
 
@@ -51,41 +51,94 @@ body {
 /* Card Container (Grid Layout) */
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid with auto-fill */
-  gap: 16px; /* Space between the cards */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Auto-fill with responsive min width for cards */
+  gap: 30px; /* Space between the cards */
   padding: 16px; /* Padding around the grid */
   width: 100%;
   max-width: 1200px; /* Max width to prevent the cards from stretching too far */
+  margin: 0 auto; /* Center the grid horizontally */
   overflow: hidden;
 }
 
 /* Card Styling */
-.card {
+.tweet-card {
   background-color: #fff;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Allow the cards to fill their container */
+  padding: 20px;
+  text-align: left;
+  transition: transform 0.3s ease;
 }
 
-/* Hover effect for cards */
-.card:hover {
-  transform: translateY(-8px); /* Lift the card slightly on hover */
+.tweet-card:hover {
+  transform: translateY(-10px); /* Slight hover effect for cards */
 }
 
-/* Card title styling */
-.card-title {
+.card-content {
+  padding: 10px;
+}
+
+.tweet-title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
 }
 
-/* Card description styling */
-.card-description {
+.tweet-company {
   font-size: 14px;
+  font-weight: normal;
+  margin-bottom: 8px;
   color: #555;
-  margin-bottom: 12px;
+}
+
+.tweet-description {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.tweet-location {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.likes-section {
+  display: flex;
+  align-items: center;
+  color: #00d1b2;
+}
+
+.likes-section .icon {
+  margin-right: 5px;
+}
+
+.likes {
+  font-weight: bold;
+}
+
+.likes-section .icon {
+  margin-right: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.likes-section .icon.liked {
+  color: red; /* Color when heart is filled */
+}
+
+.likes-section .like-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  .tweet-card {
+    width: 100%; /* Ensure cards take full width on small screens */
+  }
 }
