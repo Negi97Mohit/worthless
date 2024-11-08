@@ -5,18 +5,6 @@ import './App.css'; // Assuming the CSS file is the same
 
 const data = [
   { id: 1, title: 'Job Title 1', description: 'This is a job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 2, title: 'Job Title 2', description: 'This is another job description 1' },
-  { id: 3, title: 'Job Title 3', description: 'This is a third job description' },
   // Add more data as needed
 ];
 

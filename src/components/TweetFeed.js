@@ -40,20 +40,6 @@ const TweetFeed = () => {
       likes: 10,
       liked: false,
       images: ['https://via.placeholder.com/150'] // Example image
-    },
-    {
-      id: 2,
-      tweet: 'Better late than never but never late is better.',
-      likes: 12,
-      liked: false,
-      images: [] // No images for this tweet
-    },
-    {
-      id: 3,
-      tweet: 'Beauty in the struggle, ugliness in the success.',
-      likes: 18,
-      liked: false,
-      images: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150/0000FF'] // Two images for this tweet
     }
   ]);
 
