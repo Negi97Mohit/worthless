@@ -99,7 +99,7 @@ function App() {
               className="sort-select"
             >
               <option value="date">Posting Date</option>
-              <option value="lineCount">Line Count</option>
+              <option value="lineCount">Likes</option>
             </select>
           </div>
 
