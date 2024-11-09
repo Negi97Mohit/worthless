@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as solidHeart, faHeart as regularHeart } from '@fortawesome/free-solid-svg-icons';
 import logo from './img/logo.png';
@@ -12,6 +12,17 @@ function App() {
   const [loading, setLoading] = useState(true); // Loading state for fetching data
   const [selectedImage, setSelectedImage] = useState(null); // State for the selected image
   const [sortBy, setSortBy] = useState('date'); // Default sorting by date
+
+  // Memoize the sortPosts function with useCallback
+  const sortPosts = useCallback((postList) => {
+    if (sortBy === 'date') {
+      postList.sort((a, b) => b.timestamp - a.timestamp); // Sort by posting date
+    } else if (sortBy === 'lineCount') {
+      postList.sort((a, b) => b.text.split('\n').length - a.text.split('\n').length); // Sort by line count
+    }
+
+    setPosts(postList); // Update state with sorted posts
+  }, [sortBy]); // Dependency array includes sortBy so it will recalculate when sortBy changes
 
   // Fetch posts from Firebase
   useEffect(() => {
@@ -28,18 +39,7 @@ function App() {
 
       setLoading(false); // Set loading to false once data is fetched
     });
-  }, [sortBy]); // Re-fetch posts when sort option changes
-
-  // Function to sort posts based on selected option
-  const sortPosts = (postList) => {
-    if (sortBy === 'date') {
-      postList.sort((a, b) => b.timestamp - a.timestamp); // Sort by posting date
-    } else if (sortBy === 'lineCount') {
-      postList.sort((a, b) => b.text.split('\n').length - a.text.split('\n').length); // Sort by line count
-    }
-
-    setPosts(postList); // Update state with sorted posts
-  };
+  }, [sortBy, sortPosts]); // Add sortPosts to the dependency array
 
   const handleLikeToggle = (id) => {
     setPosts(prevPosts =>
@@ -47,20 +47,20 @@ function App() {
         if (post.id === id) {
           const currentLikeCount = post.likes || 0;
           const newLikeCount = post.liked ? currentLikeCount - 1 : currentLikeCount + 1;
-  
+
           const updatedPost = {
             ...post,
             liked: !post.liked,
             likes: newLikeCount
           };
-  
+
           if (!isNaN(newLikeCount)) {
             const postRef = ref(database, `posts/${id}`);
             update(postRef, { likes: newLikeCount, liked: !post.liked });
           } else {
             console.error("Invalid like count value:", newLikeCount);
           }
-  
+
           return updatedPost;
         }
         return post;
@@ -154,4 +154,3 @@ function App() {
 }
 
 export default App;
-
