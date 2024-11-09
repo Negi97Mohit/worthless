@@ -43,7 +43,7 @@ function App() {
     <div className="AppContainer">
       <div className="AppGrid">
         <div className="logo-column">
-          <img src={logo}  className="AppLogo" />
+          <img src={logo} alt="logo" className="AppLogo" />
         </div>
         <div className="content-column">
           <Popup />
@@ -55,12 +55,14 @@ function App() {
                   {post.images.image1 && (
                     <img
                       src={post.images.image1}
+                      alt="PostImage1"
                       className="tweet-image"
                     />
                   )}
                   {post.images.image2 && (
                     <img
                       src={post.images.image2}
+                      alt="PostImage2"
                       className="tweet-image"
                     />
                   )}
