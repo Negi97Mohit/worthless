@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as solidHeart, faHeart as regularHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import logo from './img/logo.png';
 import Popup from './components/Popup';
 import { database } from './firebaseConfig'; // Import database from firebaseConfig
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, update } from 'firebase/database'; // Import update from Firebase
 import './App.css';
 
 function App() {
@@ -14,28 +15,58 @@ function App() {
   // Fetch posts from Firebase
   useEffect(() => {
     const postsRef = ref(database, 'posts'); // Reference to 'posts' node in Firebase
-    onValue(postsRef, (snapshot) => {
+    const unsubscribe = onValue(postsRef, (snapshot) => {
       const data = snapshot.val();
       const postList = [];
       for (let id in data) {
-        postList.push({ id, ...data[id] });
+        postList.push({ id, ...data[id], liked: false }); // Initialize 'liked' to false locally
       }
-  
+
       // Sort posts by timestamp in descending order to show the latest post first
       postList.sort((a, b) => b.timestamp - a.timestamp);
-  
+
       setPosts(postList); // Update state with sorted posts
       setLoading(false); // Set loading to false once data is fetched
     });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
-  
+
+  // Handle Like Toggle - Update both local state and Firebase
   const handleLikeToggle = (id) => {
     setPosts(prevPosts =>
-      prevPosts.map(post =>
-        post.id === id
-          ? { ...post, liked: !post.liked }
-          : post
-      )
+      prevPosts.map(post => {
+        if (post.id === id) {
+          const isLiked = post.liked;
+          const currentLikeCount = post.likes || 0;
+          const newLikeCount = isLiked ? currentLikeCount - 1 : currentLikeCount + 1;
+
+          // Ensure newLikeCount is not negative
+          const validLikeCount = newLikeCount >= 0 ? newLikeCount : 0;
+
+          // Update the like count in Firebase if it's a valid number
+          if (!isNaN(validLikeCount)) {
+            const postRef = ref(database, `posts/${id}`);
+            update(postRef, { likes: validLikeCount })
+              .then(() => {
+                console.log(`Post ${id} like count updated to ${validLikeCount}`);
+              })
+              .catch((error) => {
+                console.error("Error updating like count: ", error);
+              });
+          } else {
+            console.error("Invalid like count value:", newLikeCount);
+          }
+
+          return {
+            ...post,
+            liked: !isLiked,
+            likes: validLikeCount
+          };
+        }
+        return post;
+      })
     );
   };
 
@@ -77,7 +108,9 @@ function App() {
                         className={`icon ${post.liked ? 'liked' : ''}`}
                       />
                     </button>
-                    <span className="likes">{post.liked ? 'Liked' : 'Like'}</span>
+                    <span className="likes">
+                      {post.likes || 0} {post.likes === 1 ? 'Like' : 'Likes'}
+                    </span>
                   </div>
                   <p className="timestamp">
                     Posted on: {new Date(post.timestamp).toLocaleString()}
@@ -93,3 +126,4 @@ function App() {
 }
 
 export default App;
+  
