@@ -162,7 +162,7 @@ const Popup = () => {
                 </label>
                 {image1 && (
                   <div className="uploaded-image-container">
-                    <img src={image1} alt="Uploaded 1" className="uploaded-image" />
+                    <img src={image1} className="uploaded-image" />
                     <button className="remove-btn" onClick={() => removeImage(1)}>×</button>
                   </div>
                 )}
@@ -177,7 +177,7 @@ const Popup = () => {
                 </label>
                 {image2 && (
                   <div className="uploaded-image-container">
-                    <img src={image2} alt="Uploaded 2" className="uploaded-image" />
+                    <img src={image2}  className="uploaded-image" />
                     <button className="remove-btn" onClick={() => removeImage(2)}>×</button>
                   </div>
                 )}
