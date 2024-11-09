@@ -141,3 +141,28 @@ body {
     max-width: 100%; /* Ensure cards take full width on small screens */
   }
 }
+/* Overlay styles */
+.image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure it overlays on top of everything else */
+}
+
+.overlay-image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* Optional: Add some smooth transition when showing/hiding the overlay */
+.image-overlay {
+  transition: opacity 0.3s ease;
+}
