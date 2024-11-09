@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import './Popup.css';
 import { ref, set } from "firebase/database";
-import { database } from "./firebaseConfig";  // Adjust path if needed
+import { database } from "../firebaseConfig";  // Adjust path if needed
 
 const Popup = () => {
   const [inputText, setInputText] = useState('');
@@ -45,7 +45,8 @@ const Popup = () => {
       images: {
         image1: image1 || null,
         image2: image2 || null,
-      }
+      },
+      likes: 0
     };
 
     const postRef = ref(database, 'posts/' + postId);
