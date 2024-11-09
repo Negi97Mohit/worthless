@@ -20,11 +20,15 @@ function App() {
       for (let id in data) {
         postList.push({ id, ...data[id] });
       }
-      setPosts(postList); // Update state with fetched posts
+  
+      // Sort posts by timestamp in descending order to show the latest post first
+      postList.sort((a, b) => b.timestamp - a.timestamp);
+  
+      setPosts(postList); // Update state with sorted posts
       setLoading(false); // Set loading to false once data is fetched
     });
   }, []);
-
+  
   const handleLikeToggle = (id) => {
     setPosts(prevPosts =>
       prevPosts.map(post =>
