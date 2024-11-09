@@ -5,7 +5,6 @@ import { database } from "../firebaseConfig";  // Adjust path if needed
 
 const Popup = () => {
   const [inputText, setInputText] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
   const [showPlaceholder, setShowPlaceholder] = useState(true);
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
@@ -22,12 +21,10 @@ const Popup = () => {
   };
 
   const handleFocus = () => {
-    setIsFocused(true);
     setShowPlaceholder(false);
   };
 
   const handleBlur = () => {
-    setIsFocused(false);
     setShowPlaceholder(inputText.length === 0);
   };
 
