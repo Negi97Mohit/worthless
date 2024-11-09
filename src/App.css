@@ -166,3 +166,65 @@ body {
 .image-overlay {
   transition: opacity 0.3s ease;
 }
+/* Sorting Filter */
+.sort-filter {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1); /* Slight transparent background */
+  padding: 8px 15px;
+  border-radius: 30px; /* Rounded container */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  backdrop-filter: blur(5px); /* Subtle blur effect */
+  transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.sort-filter:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly brighter on hover */
+}
+
+/* Sort label styling */
+.sort-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f0f0f0; /* Light gray for modern look */
+  margin-right: 10px;
+  letter-spacing: 0.5px; /* Slight spacing for elegance */
+}
+
+/* Select dropdown styling */
+.sort-select {
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 600; /* Bold text for modern touch */
+  color: #fff;
+  background-color: #2a2a2a; /* Dark background for select box */
+  border: none;
+  border-radius: 25px; /* Round the corners for modern style */
+  appearance: none; /* Remove default dropdown arrow */
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+.sort-select:hover {
+  background-color: #00d1b2; /* Change background color on hover */
+}
+
+.sort-select:focus {
+  background-color: #00b09b; /* Slightly darker when focused */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Shadow effect when focused */
+}
+
+.sort-select option {
+  background-color: #2a2a2a; /* Keep select options dark */
+  color: #fff;
+}
+
+/* Custom dropdown arrow */
+.sort-select::-ms-expand {
+  display: none;
+}

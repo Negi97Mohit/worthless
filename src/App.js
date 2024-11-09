@@ -11,6 +11,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state for fetching data
   const [selectedImage, setSelectedImage] = useState(null); // State for the selected image
+  const [sortBy, setSortBy] = useState('date'); // Default sorting by date
 
   // Fetch posts from Firebase
   useEffect(() => {
@@ -22,19 +23,28 @@ function App() {
         postList.push({ id, ...data[id] });
       }
 
-      // Sort posts by timestamp in descending order to show the latest post first
-      postList.sort((a, b) => b.timestamp - a.timestamp);
+      // Sort posts based on selected sort option
+      sortPosts(postList);
 
-      setPosts(postList); // Update state with sorted posts
       setLoading(false); // Set loading to false once data is fetched
     });
-  }, []);
+  }, [sortBy]); // Re-fetch posts when sort option changes
+
+  // Function to sort posts based on selected option
+  const sortPosts = (postList) => {
+    if (sortBy === 'date') {
+      postList.sort((a, b) => b.timestamp - a.timestamp); // Sort by posting date
+    } else if (sortBy === 'lineCount') {
+      postList.sort((a, b) => b.text.split('\n').length - a.text.split('\n').length); // Sort by line count
+    }
+
+    setPosts(postList); // Update state with sorted posts
+  };
 
   const handleLikeToggle = (id) => {
     setPosts(prevPosts =>
       prevPosts.map(post => {
         if (post.id === id) {
-          // Initialize likes to 0 if it's undefined
           const currentLikeCount = post.likes || 0;
           const newLikeCount = post.liked ? currentLikeCount - 1 : currentLikeCount + 1;
   
@@ -44,7 +54,6 @@ function App() {
             likes: newLikeCount
           };
   
-          // Update the likes count in Firebase if it's a valid number
           if (!isNaN(newLikeCount)) {
             const postRef = ref(database, `posts/${id}`);
             update(postRef, { likes: newLikeCount, liked: !post.liked });
@@ -79,6 +88,21 @@ function App() {
         </div>
         <div className="content-column">
           <Popup />
+
+          {/* Sorting Filter in the top right corner */}
+          <div className="sort-filter">
+            <label htmlFor="sort-select" className="sort-label">Sort By: </label>
+            <select 
+              id="sort-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="sort-select"
+            >
+              <option value="date">Posting Date</option>
+              <option value="lineCount">Line Count</option>
+            </select>
+          </div>
+
           <div className="card-container">
             {posts.map((post) => (
               <div key={post.id} className="tweet-card">
@@ -130,3 +154,4 @@ function App() {
 }
 
 export default App;
+
