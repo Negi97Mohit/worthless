@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as solidHeart, faHeart as regularHeart } from '@fortawesome/free-solid-svg-icons';
 import logo from './img/logo.png';
 import Popup from './components/Popup';
 import { database } from './firebaseConfig'; // Import database from firebaseConfig
@@ -11,15 +10,16 @@ import './App.css';
 function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state for fetching data
+  const [selectedImage, setSelectedImage] = useState(null); // State for the selected image
 
   // Fetch posts from Firebase
   useEffect(() => {
     const postsRef = ref(database, 'posts'); // Reference to 'posts' node in Firebase
-    const unsubscribe = onValue(postsRef, (snapshot) => {
+    onValue(postsRef, (snapshot) => {
       const data = snapshot.val();
       const postList = [];
       for (let id in data) {
-        postList.push({ id, ...data[id], liked: false }); // Initialize 'liked' to false locally
+        postList.push({ id, ...data[id] });
       }
 
       // Sort posts by timestamp in descending order to show the latest post first
@@ -28,46 +28,43 @@ function App() {
       setPosts(postList); // Update state with sorted posts
       setLoading(false); // Set loading to false once data is fetched
     });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
   }, []);
 
-  // Handle Like Toggle - Update both local state and Firebase
   const handleLikeToggle = (id) => {
     setPosts(prevPosts =>
       prevPosts.map(post => {
         if (post.id === id) {
-          const isLiked = post.liked;
+          // Initialize likes to 0 if it's undefined
           const currentLikeCount = post.likes || 0;
-          const newLikeCount = isLiked ? currentLikeCount - 1 : currentLikeCount + 1;
-
-          // Ensure newLikeCount is not negative
-          const validLikeCount = newLikeCount >= 0 ? newLikeCount : 0;
-
-          // Update the like count in Firebase if it's a valid number
-          if (!isNaN(validLikeCount)) {
+          const newLikeCount = post.liked ? currentLikeCount - 1 : currentLikeCount + 1;
+  
+          const updatedPost = {
+            ...post,
+            liked: !post.liked,
+            likes: newLikeCount
+          };
+  
+          // Update the likes count in Firebase if it's a valid number
+          if (!isNaN(newLikeCount)) {
             const postRef = ref(database, `posts/${id}`);
-            update(postRef, { likes: validLikeCount })
-              .then(() => {
-                console.log(`Post ${id} like count updated to ${validLikeCount}`);
-              })
-              .catch((error) => {
-                console.error("Error updating like count: ", error);
-              });
+            update(postRef, { likes: newLikeCount, liked: !post.liked });
           } else {
             console.error("Invalid like count value:", newLikeCount);
           }
-
-          return {
-            ...post,
-            liked: !isLiked,
-            likes: validLikeCount
-          };
+  
+          return updatedPost;
         }
         return post;
       })
     );
+  };
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image); // Set the selected image
+  };
+
+  const handleOverlayClose = () => {
+    setSelectedImage(null); // Close the overlay
   };
 
   if (loading) {
@@ -92,6 +89,7 @@ function App() {
                       src={post.images.image1}
                       alt="PostImage1"
                       className="tweet-image"
+                      onClick={() => handleImageClick(post.images.image1)} // Click to open image in overlay
                     />
                   )}
                   {post.images.image2 && (
@@ -99,6 +97,7 @@ function App() {
                       src={post.images.image2}
                       alt="PostImage2"
                       className="tweet-image"
+                      onClick={() => handleImageClick(post.images.image2)} // Click to open image in overlay
                     />
                   )}
                   <div className="likes-section">
@@ -108,9 +107,7 @@ function App() {
                         className={`icon ${post.liked ? 'liked' : ''}`}
                       />
                     </button>
-                    <span className="likes">
-                      {post.likes || 0} {post.likes === 1 ? 'Like' : 'Likes'}
-                    </span>
+                    <span className="likes">{post.likes || 0} {post.likes === 1 ? 'Like' : 'Likes'}</span>
                   </div>
                   <p className="timestamp">
                     Posted on: {new Date(post.timestamp).toLocaleString()}
@@ -121,9 +118,15 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* Image Overlay Modal */}
+      {selectedImage && (
+        <div className="image-overlay" onClick={handleOverlayClose}>
+          <img src={selectedImage} alt="Selected" className="overlay-image" />
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
-  
