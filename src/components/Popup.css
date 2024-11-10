@@ -261,3 +261,46 @@
 .toolbar button:hover {
   background-color: #e0e0e0;
 }
+/* Add these new styles to your existing Popup.css file */
+
+.company-selector-container {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Adjust the existing company selector styles to match the popup theme */
+.company-selector .dropdown-button {
+  background-color: white;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.company-selector .dropdown-button:hover {
+  background-color: #f5f8fa;
+}
+
+.company-selector .dropdown-content {
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  margin-top: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.company-selector .dropdown-item {
+  padding: 10px;
+  transition: background-color 0.2s;
+}
+
+.company-selector .dropdown-item:hover {
+  background-color: #f5f8fa;
+}
+
+/* Ensure the dropdown appears above other content */
+.company-selector .dropdown-content {
+  z-index: 1000;
+}
